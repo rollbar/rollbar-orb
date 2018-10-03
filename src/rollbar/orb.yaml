@@ -1,6 +1,10 @@
 version: 2.1
 
-description: Commands for calling the Rollbar API
+description: |
+  Commands for calling the Rollbar API.
+  
+  The source for the Orb can be found here:
+  https://github.com/rollbar/rollbar-orb/tree/master/src/rollbar
 
 commands:
   notify_deploy:
