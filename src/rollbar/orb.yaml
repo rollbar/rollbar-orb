@@ -21,6 +21,13 @@ commands:
         description: The Rollbar environment. Defaults to production.
     steps:
       - run:
+                name: Check for CURL
+                command: |
+                  if [[ $(command -v curl) == "" ]]; then
+                    echo "curl is required to nofify Rollbar and is not available."
+                    exit 1
+                  fi
+      - run:
           name: Notify Rollbar
           command: |
             curl https://api.rollbar.com/api/1/deploy/ \
