@@ -47,7 +47,7 @@ jobs:
         default: production
         description: The Rollbar environment. Defaults to production.
     docker:
-      - image: circleci/buildpack-deps:18.04-scm
+      - image: circleci/ruby:latest
     steps:
       - notify_deploy:
           environment: << parameters.environment >>
