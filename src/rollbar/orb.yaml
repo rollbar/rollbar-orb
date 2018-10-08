@@ -1,7 +1,7 @@
 version: 2.1
 
-      description: |
-        Commands for calling the Rollbar API.
+       description: |
+        Commands for calling the Rollbar deploy API.
         Requires `curl` and `jq` commands to be available
         The source for the Orb can be found here:
         https://github.com/rollbar/rollbar-orb/tree/master/src/rollbar
@@ -10,13 +10,13 @@ version: 2.1
         notify_deploy_started:
           description: |
             A step to notify Rollbar that the deploy of a project has started.
-            Should be used in conjunction with notify_deploy_finish.
+            Should be used in conjunction with notify_deploy_succeeded or notify_deploy_failed.
             Command will set a BASH ENV variable ROLLBAR_DEPLOY_ID with the ID of the deploy
           parameters:
             environment:
               type: string
               default: production
-              description: The Rollbar environment. Defaults to production.
+              description: The Rollbar enviaronment. Defaults to production.
           steps:
               - run:
                   name: Rollbar - Notify Deploy Started
@@ -30,6 +30,25 @@ version: 2.1
                       echo "Created deploy $ROLLBAR_DEPLOY_ID"
                       echo "export ROLLBAR_DEPLOY_ID=$ROLLBAR_DEPLOY_ID" >> $BASH_ENV
 
+        notify_deploy_finished:
+          description: |
+            A step to notify Rollbar that the deploy of a project has finished.
+            Should be used in conjunction with notify_deploy_started.
+          parameters:
+            deploy_id:
+              type: string
+              description: The deploy_id of the deploy to update
+            status:
+              type: enum
+              enum: ["succeeded","failed","timed_out"]
+          steps:
+              - run:
+                  name: Rollbar - Notify Deploy Finished
+                  command: |
+                    curl -X PATCH \
+                    https://api.rollbar.com/api/1/deploy/<< parameters.deploy_id>>?access_token=$ROLLBAR_ACCESS_TOKEN \
+                      --data '{"status":"<< parameters.status >>"}'
+
         notify_deploy:
           description: |
             A step to notify Rollbar the project has been successfully deployed.
@@ -38,6 +57,20 @@ version: 2.1
             Add this as the last step of your the job that you
             use to deploy.
           parameters:
+            environment:
+              type: string
+              default: production
+              description: The Rollbar environment. Defaults to production.
+          steps:
+            - run:
+                name: Rollbar - Notify Deploy Succeeded
+                command: |
+                  curl https://api.rollbar.com/api/1/deploy/ \
+                    --form access_token=$ROLLBAR_ACCESS_TOKEN \
+                    --form environment=<< parameters.environment >> \
+                    --form revision=$CIRCLE_SHA1 \
+                    --form local_username=$CIRCLE_USERNAME
+
             environment:
               type: string
               default: production
