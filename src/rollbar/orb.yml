@@ -70,3 +70,31 @@ commands:
               --form environment=<< parameters.environment >> \
               --form revision=$CIRCLE_SHA1 \
               --form local_username=$CIRCLE_USERNAME
+
+  upload_sourcemap:
+    description: A step to upload a sourcemap to Rollbar during a deploy.
+    parameters:
+      minified_url:
+        type: string
+        description:  The full URL of the minified file.
+      source_map:
+        type: string
+        description: The path to the local copy of the source map
+      js_files:
+        type: string
+        description: An array of loca paths to unminified javascript files.
+    steps:
+      - run:
+          name: Rollbar - Upload Sourcemap
+          command: |
+            for i in << parameters.js_files >>;
+              do
+                JS_FILES="$JS_FILES -F $i=@$i"
+              done
+            echo $JS_FILES
+            curl https://api.rollbar.com/api/1/sourcemap \
+              -F access_token=$ROLLBAR_ACCESS_TOKEN \
+              -F version=$CIRCLE_SHA1\
+              -F minified_url=<< parameters.minified_url >> \
+              -F source_map=@<< parameters.source_map >> \
+              $JS_FILES
