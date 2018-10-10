@@ -21,7 +21,7 @@ Here's a very simple example of a CircleCI config that uses the Rollbar orb to r
 ```yaml
 version: 2.1
 orbs:
-    rollbar: rollbar/deploy@latest
+    rollbar: rollbar/deploy@volatile
 jobs:
   build:
     docker:
