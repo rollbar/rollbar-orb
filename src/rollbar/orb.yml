@@ -82,7 +82,7 @@ commands:
         description: The path to the local copy of the source map
       js_files:
         type: string
-        description: An array of loca paths to unminified javascript files.
+        description: An array of local paths to unminified javascript files.
     steps:
       - run:
           name: Rollbar - Upload Sourcemap
