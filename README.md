@@ -16,7 +16,7 @@ To use the Rollbar orb, reference it in your project and then use one of the inc
 
 Documentation for each method is available inline in [orb.yml](https://github.com/rollbar/rollbar-orb/blob/master/src/rollbar/orb.yml).
 
-Here's a very simple example of a CircleCI config that uses the Rollbar orb to report a deploy starting and finishing:
+Here's a very simple example of a CircleCI config that uses the Rollbar orb to report a deploy starting and finishing as well as uploading sourcemaps:
 
 ```yaml
 version: 2.1
@@ -32,10 +32,15 @@ jobs:
     steps:
       - checkout
       - rollbar/notify_deploy_started:
-          environment: production
+          environment: $ROLLBAR_ENVIRONMENT
+      - rollbar/upload_sourcemap:
+          minified_url: https://rollbar.com/rollbar.min.js
+          source_map: static/js/rollbar.js.map
+          js_files:  static/js/rollbar.js
+     
+     # The rest of your build steps go here...
 
-# The rest of your build steps go here...
-
+     # Notify Rollbar when your deploy has completed successfully
       - rollbar/notify_deploy_finished:
           deploy_id: $ROLLBAR_DEPLOY_ID
           status: succeeded
