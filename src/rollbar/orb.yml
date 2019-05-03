@@ -2,7 +2,7 @@ version: 2.1
 
 description: |
   Commands for calling the Rollbar deploy API.
-  Requires `curl` and `jq` commands to be available.
+  Requires `curl`, `git` and `jq` commands to be available.
   The source for the Orb can be found here:
   https://github.com/rollbar/rollbar-orb/tree/master/src/rollbar
 
@@ -29,6 +29,7 @@ commands:
                 --form access_token=${<< parameters.token_name >>} \
                 --form environment=<< parameters.environment >> \
                 --form revision=$CIRCLE_SHA1 \
+                --form comment="$(git show --no-patch --format=%s)"
                 --form local_username=$CIRCLE_USERNAME \
                 --form status=started | jq -r '.data.deploy_id'`
                 echo "Created deploy $ROLLBAR_DEPLOY_ID"
@@ -81,6 +82,7 @@ commands:
               --form access_token=${<< parameters.token_name >>} \
               --form environment=<< parameters.environment >> \
               --form revision=$CIRCLE_SHA1 \
+              --form comment="$(git show --no-patch --format=%s)"
               --form local_username=$CIRCLE_USERNAME
 
   upload_sourcemap:
