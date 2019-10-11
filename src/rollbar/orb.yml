@@ -83,6 +83,7 @@ commands:
       js_files:
         type: string
         description: An array of local paths to unminified javascript files.
+        default: ''
     steps:
       - run:
           name: Rollbar - Upload Sourcemap
