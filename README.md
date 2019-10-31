@@ -55,6 +55,10 @@ For bug reports, please [open an issue on GitHub](https://github.com/rollbar/rol
 
 ## Contributing
 
+For details on how to do development work on a CircleCI orb, check out [Circle CI's Orb docs](https://circleci.com/docs/2.0/creating-orbs/).
+
+To contribute to the Rollbar orb:
+
 1. [Fork it](https://github.com/rollbar/rollbar-orb)
 2. Create your feature branch (```git checkout -b my-new-feature```).
 3. Commit your changes (```git commit -am 'Added some feature'```)
