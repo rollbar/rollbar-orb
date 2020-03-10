@@ -4,7 +4,10 @@ description: |
   Commands for calling the Rollbar deploy API.
   Requires `curl` and `jq` commands to be available.
   The source for the Orb can be found here:
-  https://github.com/rollbar/rollbar-orb/tree/master/src/rollbar
+
+display:
+  source_url: https://github.com/rollbar/rollbar-orb
+  home_url: https://rollbar.com/
 
 commands:
   notify_deploy_started:
