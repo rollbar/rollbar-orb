@@ -44,6 +44,10 @@ commands:
       status:
         type: enum
         enum: ["succeeded","failed","timed_out"]
+      when:
+        type: enum
+        enum: ["on_fail","on_success","always"]
+        default: always
     steps:
         - run:
             name: Rollbar - Notify Deploy Finished
@@ -51,6 +55,7 @@ commands:
               curl -X PATCH \
               https://api.rollbar.com/api/1/deploy/<< parameters.deploy_id>>?access_token=$ROLLBAR_ACCESS_TOKEN \
                 --data '{"status":"<< parameters.status >>"}'
+            when: << parameters.when >>
 
   notify_deploy:
     description: |
